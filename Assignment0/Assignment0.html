@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>jQuery AJAX Country Autocomplete</title>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script>
+    // TODO: insert the later-detailed JavaScript
+        $(document).ready(function(){
+            //notice below that the #country selector denotes the element with id=country
+            $("#country").keyup(function(){
+                $.ajax({
+                type: "GET",
+                url: "https://instasham.cstutoring.ca/Country/search",
+                data: {keyword: $(this).val()},
+                dataType: 'json',
+                success:
+                    function(data){
+                        if(data.length==0 || data.length == 1 && data[0].nicename == $("#country").val())
+                        {
+                            removeSuggestions();
+                            return;
+                        }
+                        //the variable newContent is there for you to write all required HTML
+                        var newContent = '';
+                        data.forEach(function(a){
+                            newContent += '<span class="suggestion" onClick="selectCountry(\'' + a.nicename +'\');">' + a.nicename + '</span><br>';
+                        });
+
+                        //TODO: set the contents div id=country-suggestion to the value of newContent using the html() method
+                            // this gets countries that has the letters you type in the search bar and shows it in the suggestion-box
+                        $("#country-suggestion").html(newContent);
+                        // document.getElementById('country-suggestion').innerHTML = newContent;
+                        //TODO: display the div id=country-suggestion
+                            // this makes the suggestion-box visible because we put it a 'hidden' in the css
+                        document.getElementById('country-suggestion').style.visibility='visible';
+                    }
+                });
+            });
+        });
+
+        function selectCountry(val) {
+            // TODO: set the input id=country value to the value of the val variable
+                // this puts the country selected on the search bar
+            document.getElementById('country').value = val;
+            removeSuggestions();
+        }
+
+        function removeSuggestions(){
+            // TODO: hide the div with id=country-suggestion
+                // this hides the suggestion-box after you have selected a country
+            document.getElementById('country-suggestion').style.visibility='hidden';
+            // TODO: empty the div with id=country-suggestion
+                // this puts nothing in the content of the div contry-suggestion, so it be empty
+            document.getElementById('country-suggestion').innerHTML = '';
+        }
+    </script>
+    <style>
+    /* TODO: insert CSS to display things correctly */
+        .suggestion-box {
+            position: absolute;
+            background-color: white;
+            border: 1px #333333 solid;
+            border-radius: 3px;
+            padding: 7px;
+            visibility: hidden;
+            /* cursor: pointer; */
+        }
+
+        .suggestion:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>jQuery-AJAX Country Autocomplete</h1>
+    
+        <!-- TODO: insert a text input box with the name country and id country -->
+        <!-- to give users instructions, the placeholder data should be "Country name" -->
+        <input type="text" id="country" name="country" placeholder="Country Name"><br><br>
+        
+        <!-- TODO: insert a div with id country-suggestion and class suggestion-box -->
+        <div id="country-suggestion" class="suggestion-box">  </div><br> 
+
+        <p>Write the name of the country in the text input above to search for a country. Then when you see the country of your liking, click on it to automatically complete the input.</p>
+    </div>
+</body>
+</html>
